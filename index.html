@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Texas Hold'em Turn Simulator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <h1>テキサスホールデムポーカーの世界</h1>
+
+  <div id="table">
+    <div id="board"></div>
+    <div id="hand"></div>
+  </div>
+
+  <button id="dealButton">カードを配る</button>
+
+  <div id="probability">
+  <table>
+    <thead>
+      <tr>
+        <th>役</th>
+        <th>確率</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ワンペア</td>
+        <td id="onePair">-</td>
+      </tr>
+      <tr>
+        <td>ツーペア</td>
+        <td id="twoPair">-</td>
+      </tr>
+      <tr>
+        <td>スリーカード</td>
+        <td id="three">-</td>
+      </tr>
+      <tr>
+        <td>ストレート</td>
+        <td id="straight">-</td>
+      </tr>
+      <tr>
+        <td>フラッシュ</td>
+        <td id="flush">-</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
