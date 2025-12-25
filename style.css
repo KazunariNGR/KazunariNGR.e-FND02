@@ -3,6 +3,30 @@ body {
   text-align: center;
 }
 
+#rulePanel {
+  position: absolute;
+  top: 120px;
+  left: 40px;
+  width: 260px;
+  background: #ffffff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+#rulePanel h2 {
+  font-size: 15px;
+  margin-top: 0;
+  margin-bottom: 8px;
+}
+
+#rulePanel strong {
+  color: #b22222;
+}
+
 /*テーブル（緑の楕円）*/
 #table {
   position: relative;
@@ -83,4 +107,24 @@ body {
 /*見出し*/
 #probability th {
   background-color: #eee;
+}
+
+/*カード背面*/
+.opponent {
+  position: absolute;
+  display: flex;
+  gap: 10px;
+}
+
+.card.back {
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  border: 2px solid #fff;
+  color: transparent;
+}
+
+/*位置配置*/
+#opponent-top {
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
 }
