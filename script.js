@@ -73,6 +73,18 @@ function displayBoard(boardCards, elementId) {
   area.appendChild(empty);
 }
 
+//他のプレイヤーカード2枚を描画
+function displayBackCards(elementId) {
+  const area = document.getElementById(elementId);
+  area.innerHTML = "";
+
+  for (let i = 0; i < 2; i++) {
+    const div = document.createElement("div");
+    div.className = "card back";
+    area.appendChild(div);
+  }
+}
+
 //確率表示
 function displayProb(probs) {
   document.getElementById("onePair").textContent = probs.onePair.toFixed(1) + "%";
@@ -87,21 +99,93 @@ function displayProb(probs) {
 }
 
 
-
 document.getElementById("dealButton").addEventListener("click", () => {
   const { hand, board } = dealCards();
 
   displayCards(hand, "hand");//手札2枚を下に表示
   displayBoard(board, "board");//場5枚を中央に表示（右端は枠だけ）
+  displayBackCards("opponent-top");
+  const turnBoard = board.slice(0, 4);
 
   // 確率計算
   const dummy = {
-    onePair: 13.0,
-    twoPair: 18.6,
-    threeOfKind: 4.3,
-    straight: 17.4,
-    flush: 19.5
+    onePair: calOnePair(hand,turnBoard),
+    twoPair: calTwoPair(hand,turnBoard),
+    threeOfKind: calThreeOfKind(hand,turnBoard),
+    straight: "未実装",
+    flush: "未実装"
   };
 
   displayProb(dummy);
 });
+
+//ワンペア確率
+function calOnePair(hand, turnBoard) {
+  const [h1, h2] = hand;
+  const boardRanks = turnBoard.map(c => c.rank); //スートをとる
+
+  //ポケットペア
+  if (h1.rank === h2.rank) {
+    return 100.0;
+  }
+
+  //すでにワンペア
+  if (boardRanks.includes(h1.rank) || boardRanks.includes(h2.rank)) {
+    return 100.0;
+  }
+
+  //リバーで完成する確率
+  return ( 6 / 46 ) * 100;
+}
+
+//ツーペア確率
+function calTwoPair(hand, turnBoard) {
+  const [h1, h2] = hand;
+  const boardRanks = turnBoard.map(c => c.rank);
+
+  //すでにツーペア
+  const h1Hit = boardRanks.includes(h1.rank);
+  const h2Hit = boardRanks.includes(h2.rank);
+
+  if (h1Hit && h2Hit) {
+    return 100.0;
+  }
+
+  //ペアなし
+  const noPair = !h1Hit && !h2Hit && h1.rank !== h2.rank;
+  if (noPair) {
+    return 0.0;
+  }
+
+  //ワンペアからツーペアになる確率
+  return (3 / 46) * 100;
+}
+
+//スリーカード確率
+function calThreeOfKind(hand, turnBoard) {
+
+  const [h1, h2] = hand;
+  const boardRanks = turnBoard.map(c => c.rank);
+
+  //手札と同じランクが場に何枚出ているか
+  const h1Matches = boardRanks.filter(r => r === h1.rank).length;
+  const h2Matches = boardRanks.filter(r => r === h2.rank).length;
+
+  //すでにスリーカード
+  if ((h1.rank === h2.rank && h1Matches >= 1) ||  // ポケットペア＋ボード1枚
+      h1Matches >= 2 || h2Matches >= 2) {
+    return 100.0;
+  }
+
+  //ペアなし
+  const noPair =
+    h1Matches === 0 && h2Matches === 0 && h1.rank !== h2.rank;
+
+  if (noPair) {
+    return 0.0;
+  }
+
+  //ワンペアからスリーカードの確率
+  return (2 / 46) * 100;
+}
+
